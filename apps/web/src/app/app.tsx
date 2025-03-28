@@ -1,3 +1,7 @@
+/*
+ * @Author: zhangy
+ * @Date: 2025-03-28 17:12:13
+ */
 import { useState } from 'react';
 import { initializeData } from './initialize-data';
 import { Drawnix } from '@drawnix/drawnix';
@@ -6,7 +10,7 @@ import { PlaitBoard, PlaitElement, PlaitTheme, Viewport } from '@plait/core';
 const DRAWNIX_LOCAL_DATA_KEY = 'drawnix-local-data';
 
 export function App() {
-  const [value, setValue] = useState<{
+  const [value] = useState<{
     children: PlaitElement[];
     viewport?: Viewport;
     theme?: PlaitTheme;
@@ -19,25 +23,23 @@ export function App() {
   });
 
   return (
-    <>
-      <Drawnix
-        value={value.children}
-        viewport={value.viewport}
-        theme={value.theme}
-        onChange={(value) => {
-          localStorage.setItem(DRAWNIX_LOCAL_DATA_KEY, JSON.stringify(value));
-        }}
-        afterInit={(board) => {
-          console.log('board initialized');
-          console.log(
-            `add __drawnix__web__debug_log to window, so you can call add log anywhere, like: window.__drawnix__web__console('some thing')`
-          );
-          (window as any)['__drawnix__web__console'] = (value: string) => {
-            addDebugLog(board, value);
-          };
-        }}
-      ></Drawnix>
-    </>
+    <Drawnix
+      value={value.children}
+      viewport={value.viewport}
+      theme={value.theme}
+      onChange={(value) => {
+        localStorage.setItem(DRAWNIX_LOCAL_DATA_KEY, JSON.stringify(value));
+      }}
+      afterInit={(board) => {
+        console.log('board initialized');
+        console.log(
+          `add __drawnix__web__debug_log to window, so you can call add log anywhere, like: window.__drawnix__web__console('some thing')`
+        );
+        (window as any)['__drawnix__web__console'] = (value: string) => {
+          addDebugLog(board, value);
+        };
+      }}
+    ></Drawnix>
   );
 }
 
